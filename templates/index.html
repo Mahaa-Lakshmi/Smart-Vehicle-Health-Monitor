@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../static/index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Pacifico&display=swap" rel="stylesheet">
+    <title></title>
+  </head>
+  <body>
+    <div id="bg">  </div>
+    <div id="gradient">
+    <div id="title">
+      Vehicle Health Monitoring System
+    </div>
+    <div id="choice">
+
+      <p>
+      <button type="button" class="btn" id="bt1" onclick="window.location.href='{{ url_for( 'choose_register') }}';">Register</button>&nbsp;&nbsp;&nbsp;
+      <button type="button" class="btn" id="bt2" onclick="window.location.href='{{ url_for( 'choose_login') }}';">Login</button>
+      </p>
+    </div>
+  </div>
+
+  </body>
+</html>

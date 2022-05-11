@@ -1,0 +1,168 @@
+
+body {font-family: Arial, Helvetica, sans-serif;}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+.userimg {
+  height: 100px;
+  text-align: center;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  /*width: 50%;*/
+
+}
+
+.container
+{
+  margin: 0 !important;
+  position: absolute;
+  width: 100%;
+  padding: 0;
+}
+
+.row{
+  margin: 0 !important;
+  width: 100% !important;
+  display: table; 
+}
+
+.effect3D
+{
+  transform:
+    perspective(75em)
+    ;
+  box-shadow:
+    rgba(22, 31, 39, 0.42) 0px 60px 123px -25px,
+    rgba(19, 26, 32, 0.08) 0px 35px 75px -35px;
+  border-radius: 10px;
+  border: 1px solid;
+  border-color:
+    rgb(213, 220, 226)
+    rgb(213, 220, 226)
+    rgb(184, 194, 204);
+        }
+ 
+
+.smallbox{
+  background-color: lightseagreen;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  height: auto;
+  float: none;
+    display: table-cell;
+    vertical-align: top;
+  }
+
+.value
+{
+  font-size: 60px;
+}
+
+table
+{
+  width: 100%;
+  margin: 0 !important;
+}
+td{
+  padding: 5px;
+}
+
+h3
+{
+  font-size: 70px;
+}
+
+#graph1
+{
+  height: auto;
+  width: 100%;
+  object-fit: contain;
+  padding: 5px;
+}
+
+.graphbox{
+  padding: 5px;
+   }
+
+.icon
+{
+  height: auto;
+  width: 80%;
+}
+
+
+
+.symboldata
+{
+  width: 20%;
+}
+
+#engine_temp
+{
+  background-color: orange;
+}
+
+#intake_Air_temp
+{
+ background-color: deeppink; 
+}
+
+.healthbutton
+{
+width:80%;
+padding:100px;
+margin: auto;
+text-align: center;
+}
+
+@media (min-width: 768px) {
+ .row
+ {
+ display:flex;
+  }
+ .graphbox
+ {
+ flex:1;
+
+ }
+
+ }
+
+.glyphicon-info-sign{font-size: 20px;}

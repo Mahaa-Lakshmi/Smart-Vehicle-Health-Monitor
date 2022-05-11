@@ -1,0 +1,75 @@
+body, html {
+  height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+#bg{
+  background-image:url(../static/images/bg1.jpg);
+  filter: blur(1px);
+  -webkit-filter: blur(1px);
+   height: 100%;
+   background-position: center;
+   background-repeat: no-repeat;
+   background-size: cover;
+}
+#gradient{
+  animation: move 3s;
+  color: yellow;
+  font-weight: bold;
+  border: 3px dotted #f1f1f1;
+  position: relative;
+  width: 50%;
+  text-align: center;
+  left:30%;
+  top:-60%;
+
+}
+@keyframes move {
+  from{left:30%;top:-100%;}
+  to{left:30%;top:-60%;}
+
+}
+#title,#choice{
+  font-size: 30px;
+  font-family: 'Lobster', cursive;
+  font-family: 'Pacifico', cursive;
+}
+.btn{
+  font-size: 30px;
+  font-family: 'Lobster', cursive;
+  font-family: 'Pacifico', cursive;
+  display: inline-block;
+  border:none;
+  background-color: inherit;
+  text-decoration: none;
+  width:auto;
+  height:auto;
+}
+
+button{
+  text-decoration: none;
+  color:white;
+
+}
+button:hover{
+  transition-duration: 0.4s;
+  background-color: white;
+  color:black;
+}
+
+
+/* Responsive Websites: Media query to add a breakpoint at 800px: */
+@media screen and (max-width: 800px) {
+   #gradient{
+    width: 95%; /* The width is 100%, when the viewport is 800px or smaller */
+    left:2%;
+
+  top:-60%;
+  }
+  #bg{
+  background-size:cover;
+  background-position:center;
+  }
+}

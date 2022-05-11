@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Login Page with Background Image Example</title>
+  <link rel="stylesheet" href="../static/register.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<div id="bg"></div>
+
+<form id="regForm" action="{{url_for('register')}}" method="post">
+
+    <input name="email" style="background-image: url(../static/images/user-icon.png);background-position:15px center;background-size:20px 20px;background-repeat: no-repeat;" width="20px" height="20px" type="email" placeholder="Email / Username" required/>
+<br>
+
+  <select class="Car" name="car" style="background-image: url(../static/images/car.png);background-position:15px center;background-size: 27px 16px;background-repeat: no-repeat;" width="100px" height="16px">
+   <option value="volvo">Volvo</option>
+   <option value="tata">Tata</option>
+   <option value="susuki">Susuki</option>
+  </select>
+  <br>
+  <input type="text" placeholder="Vehicle Identification Number" name="vehicle_id" required style="background-image: url(../static/images/car.png);background-position:15px center;background-size: 27px 16px;background-repeat: no-repeat;" width="27px" height="16px"/><br>
+    <input type="password" placeholder="Password" name="password" required style="background-image: url(../static/images/lock-icon.png);background-position:15px center;background-size: 16px 16px;background-repeat: no-repeat;" width="16px" height="16px"/>  <!--<div class="form-field">
+  <input type="Re-enter password" placeholder="re-enter Password" required/></div>
+--><br>
+    <button class="btn" type="submit">Register</button>
+    <p style="text-align:center;color:white;">{{msg}}</p>
+  </form>
+<!-- partial -->
+
+</body>
+</html>

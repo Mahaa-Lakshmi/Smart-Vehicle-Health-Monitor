@@ -1,0 +1,385 @@
+    <!DOCTYPE html>
+    <html>
+    <head>
+    	<meta charset="utf-8">
+    	<title>User Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+      <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+            <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="../static/styles.css">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js" integrity="sha512-QSkVNOCYLtj73J4hbmVoOV6KVZuMluZlioC+trLpewV8qMjsWqlIQvkn1KGX2StWvPMdWGBqim1xlC8krl1EKQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    </head>
+    <body >
+
+
+    <!-- Trigger/Open The Modal -->
+
+    <nav class="navbar navbar-inverse navbar-fixed">
+      <div class="container-fluid  ">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Vehicle Health Monitor</a>
+        </div>
+        
+        <ul class="nav navbar-nav  navbar-right">
+          <li>
+          <button type="button" class="btn btn-default btn-lg" id="myBtn" style="float: right;">
+          <span class="glyphicon glyphicon-menu-hamburger"></span>     </button></li>
+          </ul>
+      </div>
+    </nav>
+
+
+
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <p style="text-align: center;" >Profile</p>
+
+
+    <img src="../static/images/user1.jpg" class="userimg">
+    <div style="text-align: center;" >
+    <p>{{userDetails['email']}}</p>
+    <br>
+
+
+        <p><b>Car:</b> {{userDetails['car']}}</p>
+    <p><b>VIN: </b>{{userDetails['vehicle_id']}}</p>
+    <br>
+    <a href="{{url_for('logout')}}"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
+    </div>
+
+      </div>
+
+    </div>
+
+    <!--body of the dashboard-->
+    <div class="container row-no-gutters">
+<h2>Vehicle parameter Report on the last drive</h2><br>
+    <!--ROW1-->
+
+    <div class="row ">
+
+    <!--Run time-->
+
+    <!--RPM-->
+
+    <!--RPM-->
+    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 text-center effect3D smallbox"  >
+          <table>
+        <tr>
+          <td><h3><span class="glyphicon glyphicon-hourglass"></span></h3>
+            <p>Runtime</p></td>
+          <td><div><h1 class="value ">{{list_values[0]}}</h1><p class="units">{{units}}</p></div></td>
+
+          </tr>
+    </table>
+
+    </div>
+
+    <!--RPM-->
+    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 text-center effect3D smallbox"  >
+          <table>
+        <tr>
+          <td><h3><span class="glyphicon glyphicon-dashboard"></span></h3>
+            <p>Engine RPM (Max)</p>
+          </td>
+          <td><div><h1 class="value ">{{list_values[1]}}</h1><p class="units">RPM</p></div></td>
+
+          </tr>
+    </table>
+
+    </div>
+
+
+    <!--RPM-->
+    <!--RPM-->
+    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 text-center effect3D smallbox"  >
+          <table>
+        <tr>
+          <td><h3><span class="glyphicon glyphicon-dashboard"></span></h3>
+            <p>Engine RPM (Avg)</p>
+          </td>
+          <td><div><h1 class="value ">{{list_values[2]}}</h1><p class="units">RPM</p></div></td>
+
+          </tr>
+    </table>
+
+    </div>
+
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 text-center effect3D smallbox"  >
+          <table>
+        <tr>
+          <td><h3><img src="../static/images/vehicle_speed.png" height="70px"></h3>
+            <p>Average Speed</p>
+          </td>
+          <td><div id="runtime "><h1 class="value " >{{avg_speed}}</h1><p class="units">Km/Hr</p></div></td>
+
+          </tr>
+    </table>
+
+    </div>
+
+
+
+    </div>
+
+    <!--end of 1st row-->
+
+    <br>
+    <!--ROW2-->
+
+    <div class="row ">
+
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 text-center effect3D graphbox " >
+<button type="button" id="1" class="btn btn-default btn-sm" style="float:right;top:0;background-color:transparent;border:none" onclick="mymodalfunc(this.id);">
+          <span class="glyphicon glyphicon-info-sign"></span>
+        </button>
+
+        <canvas id="temperature_comp" ></canvas>
+        </div>
+
+
+
+
+        <div  class="col-xs-12 col-sm-12 col-md-12 col-lg-4 text-center effect3D graphbox "  >
+
+          <button type="button" id="2" class="btn btn-default btn-sm" style="float:right;top:0;background-color:transparent;border:none" onclick="mymodalfunc(this.id);">
+          <span class="glyphicon glyphicon-info-sign"></span>
+        </button>
+            <p>ENGINE RPM for the day</p>
+
+                      <canvas id="engine_rpm"></canvas>
+
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 text-center effect3D graphbox"  >
+        <button type="button" id="3" class="btn btn-default btn-sm" style="float:right;top:0;background-color:transparent;border:none" onclick="mymodalfunc(this.id);">
+          <span class="glyphicon glyphicon-info-sign"></span>
+        </button>
+
+            <p>Vehicle Speed</p>
+
+        <canvas id="vehicle_speed"></canvas>
+
+        </div>
+
+
+
+    </div><!--end of 2nd row-->
+
+    <!-- The Modal -->
+    <div id="myModal1" class="modal">
+
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span class="close" id="close1">&times;</span>
+        <p style="text-align: center;" >Info</p>
+        <p><b id="modal_title"></b></p>
+          <div id="modal-body-content"></div><br>
+        <p><b id="modal_conclude"></b></p>
+
+
+      </div>
+
+    </div>
+    <!--3rd row-->
+        <!--Health-->
+<div class="row">
+    <div class="healthbutton">
+    <button type="button" class="btn btn-warning btn-lg" onclick="window.location.href='{{url_for('checkhealth')}}';">Check Vehicle Health</button>
+    <br><br>
+        <button type="button" class="btn btn-warning btn-lg" onclick="window.location.href='{{url_for('livecheckhealth')}}';">Check Live Vehicle Health</button>
+    <br><br>
+    {% if type %}
+    <img src="../static/images/{{res}}.png">
+        <h1>Vehicle {{type}} Status : {{res_word}}</h1>
+        <p>{{msg}}</p>
+        {% endif %}
+    </div>
+
+</div>
+
+
+
+
+    </div>
+    <!--end of 1st container-->
+
+
+
+
+
+
+    <script>
+
+//graph
+const labels = {{engine_runtime}};
+
+  const data = {
+    labels: labels,
+    datasets: [{
+      label: 'Engine RPM Reading',
+      backgroundColor: 'rgb(255, 99, 132)',
+      borderColor: 'rgb(255, 99, 132)',
+      data: {{engine_rpm}} ,
+    }]
+  };
+
+  const config = {
+    type: 'line',
+    data: data,
+    options: {}
+  };
+
+  const engine_rpm = new Chart(
+    document.getElementById('engine_rpm'),
+    config
+  );
+
+const vehicle_speed=new Chart(document.getElementById("vehicle_speed"), {
+                type: "line",
+                data:
+                {
+                    labels: labels,
+                    datasets: [{
+                        label: "Speed of the vehicle (Kmph)",
+
+                        data: {{vehicle_speed}},
+                        fill: false,
+                        borderColor: "rgb(75, 192, 192)",
+                        lineTension: 0.1
+                    }]
+                },
+                options: {}
+            });
+
+const temperature_comp=new Chart(document.getElementById("temperature_comp"), {
+                type: "doughnut",
+                data:
+                {
+                    labels: ['ENGINE TEMPERATURE','INTAKE AIR TEMPERATURE'],
+                    datasets: [{
+    label: 'Engine Temperature VS Intake Air Temperature',
+    data: [{{coolant_temp}},{{intake_air_temp}}],
+    backgroundColor: [
+      'rgb(255, 99, 132)',
+      'rgb(54, 162, 235)',
+
+    ],
+                }]},
+                options: {}
+            });
+
+
+
+
+    // Get the modal
+    var modal = document.getElementById("myModal");
+
+    // Get the button that opens the modal
+    var btn = document.getElementById("myBtn");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks the button, open the modal
+    btn.onclick = function() {
+      modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+
+
+    }
+
+
+
+function mymodalfunc(id){
+
+ // Get the modal
+    var modal1 = document.getElementById("myModal1");
+
+    // Get the button that opens the modal
+    var graphbtn = document.getElementById(id);
+
+    // When the user clicks the button, open the modal
+      modal1.style.display = "block";
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementById("close1");
+
+
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+      modal1.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal1) {
+        modal1.style.display = "none";
+      }
+    }
+//editting contents based on the div id
+if(id==="1")
+{
+//my modal graph description text
+
+var temp="The temperature gauge provides an early warning of overheating, allowing you to stop the car before any damage occurs. In very cold weather, the gauge can also tell you if the engine is being overcooled (which will increase fuel consumption and engine wear).It prevents the coolant from freezing during cold weather. It raises the boiling temperature of the coolant to prevent overheating during hot weather. It fights corrosion.";
+document.getElementById("modal_title").innerText="Engine Temperature";
+   document.getElementById("modal-body-content").innerText=temp;
+    document.getElementById("modal_conclude").innerText="So what's a normal temperature for your vehicle's engine? Most experts agree that your engine should run between 90 degrees and 104 degrees in Celcius.";
+    }
+
+else if(id==="2")
+{
+//my modal graph description text
+
+var temp="Rpm uses:\n\n1. RPM measures the number of engine cycles and then indicates the appropriate time to move between speeds either by moving to a higher speed or less speed.RPM, when properly used, keeps the gearbox and the engine  protected from overheating and damage.\n 2. Helps to maintain smooth and easy transition from one speed to another.smooth transition Protects the car from vibration or engine stop. \n3. RPM  gives an idea of the performance of the engine in the car, helping to maintain the engine and prolong its lifespan.";
+
+document.getElementById("modal_title").innerText="Engine RPM";
+   document.getElementById("modal-body-content").innerText=temp;
+    document.getElementById("modal_conclude").innerText="With RPM, you can see if the transmission gearbox and the engine work efficiently. The lower the engine cycle rate per minute, the less fuel consumption of the engine.To maintain good fuel consumption, keep your RPM between 1500 and 2000 rpm when driving at a constant speed. This will help you save fuel.";
+    }
+
+
+else
+{
+//my modal graph description text
+
+var temp="A speedometer or speed meter is a gauge that measures and displays the instantaneous speed of a vehicle.";
+
+document.getElementById("modal_title").innerText="Vehicle Speed";
+   document.getElementById("modal-body-content").innerText=temp;
+    document.getElementById("modal_conclude").innerText="The faster you drive, the more quickly your car parts quality gets downgraded. So, driving your car at a certain speed will reduce wear-and-tear, and your dream vehicle will deliver stunning performances for years to come.";
+    };
+
+}
+
+
+    </script>
+
+
+
+
+
+    </body>
+    </html>
