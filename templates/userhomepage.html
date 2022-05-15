@@ -207,8 +207,22 @@
 
 </div>
 
+<!--4th row-->
+       <div class="row">
+            <div  class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center effect3D graphbox "  >
+                <button type="button" class="btn btn-warning btn-lg" onclick="window.location.href='{{url_for('knowmore')}}';">Know More!</button>
+                <div>
+                {%if flag%}
+
+                <canvas id="distance_covered"></canvas>
+                {%endif%}
+                    </div>
+            </div>
 
 
+       </div>
+
+<!--End of 4th row-->
 
     </div>
     <!--end of 1st container-->
@@ -279,8 +293,6 @@ const temperature_comp=new Chart(document.getElementById("temperature_comp"), {
             });
 
 
-
-
     // Get the modal
     var modal = document.getElementById("myModal");
 
@@ -307,9 +319,7 @@ const temperature_comp=new Chart(document.getElementById("temperature_comp"), {
       }
 
 
-    }
-
-
+    };
 
 function mymodalfunc(id){
 
@@ -370,9 +380,38 @@ var temp="A speedometer or speed meter is a gauge that measures and displays the
 document.getElementById("modal_title").innerText="Vehicle Speed";
    document.getElementById("modal-body-content").innerText=temp;
     document.getElementById("modal_conclude").innerText="The faster you drive, the more quickly your car parts quality gets downgraded. So, driving your car at a certain speed will reduce wear-and-tear, and your dream vehicle will deliver stunning performances for years to come.";
-    };
+    }
 
 }
+
+// distance prediction graph
+const dist_labels={{pred_index}};
+const distance=new Chart(document.getElementById("distance_covered"), {
+                type: "line",
+                data:
+                {
+                    labels:dist_labels,
+                    datasets: [{
+                        label: "Distance covered",
+                        data: {{actual_dist}},
+                        fill: false,
+                        borderColor: "rgb(75, 192, 192)",
+                        lineTension: 0.1
+                    },
+
+                    {
+                    label: "Distance can be covered",
+
+                        data: {{pred_dist}},
+                        fill: false,
+                        borderColor: "rgb(255, 99, 132)",
+                        lineTension: 0.1
+                    }
+                    ]
+                },
+                options: {}
+            });
+
 
 
     </script>

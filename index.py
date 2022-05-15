@@ -1,5 +1,14 @@
 import urllib
-
+import pandas as pd
+from statsmodels.tsa.arima.model import ARIMA
+from sklearn.metrics import mean_squared_error
+from math import sqrt
+import matplotlib.pyplot as plt
+import numpy as np
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
+warnings.filterwarnings("ignore")
+import itertools
 from flask import Flask, render_template, request, url_for,redirect
 #from classifier import myfunc
 import firebase_admin
@@ -163,7 +172,7 @@ def login():
             if send_list_values==0:
                 return render_template("nodatapage.html",msg="NO such files uploaded from the car",userDetails=userDetails)
             else:
-                return render_template("userhomepage.html",coolant_temp=send_list_values[6],avg_speed=send_list_values[8],intake_air_temp=send_list_values[7],userDetails=userDetails,list_values=send_list_values,engine_rpm=send_list_values[3],engine_runtime=send_list_values[4],vehicle_speed=send_list_values[5],units=send_list_values[-1])
+                return render_template("userhomepage.html",pred_index=0,actual_dist=[],pred_dist=[],coolant_temp=send_list_values[6],flag="",avg_speed=send_list_values[8],intake_air_temp=send_list_values[7],userDetails=userDetails,list_values=send_list_values,engine_rpm=send_list_values[3],engine_runtime=send_list_values[4],vehicle_speed=send_list_values[5],units=send_list_values[-1])
 
         except:
             msg="Invalid email or password"
@@ -223,9 +232,9 @@ def checkhealth():
         res_word="BAD"
         msg="Immediate Service Required"
     send_list_values = get_dashboard_values()
-    return render_template("userhomepage.html", coolant_temp=send_list_values[6], avg_speed=send_list_values[8],
+    return render_template("userhomepage.html",pred_index=0,actual_dist=[],pred_dist=[], coolant_temp=send_list_values[6], avg_speed=send_list_values[8],
                            intake_air_temp=send_list_values[7], userDetails=userDetails, list_values=send_list_values,
-                           engine_rpm=send_list_values[3], engine_runtime=send_list_values[4],
+                           engine_rpm=send_list_values[3], engine_runtime=send_list_values[4],flag="",
                            vehicle_speed=send_list_values[5],units=send_list_values[-1],res=res,res_word=res_word,type='Health',msg=msg)
 
 
@@ -247,10 +256,94 @@ def livecheckhealth():
         res_word="BAD"
         msg="Immediate Service Required"
     send_list_values = get_dashboard_values()
+    return render_template("userhomepage.html", pred_index=0,actual_dist=[],pred_dist=[],coolant_temp=send_list_values[6], avg_speed=send_list_values[8],
+                           intake_air_temp=send_list_values[7], userDetails=userDetails, list_values=send_list_values,
+                           engine_rpm=send_list_values[3], engine_runtime=send_list_values[4],
+                           vehicle_speed=send_list_values[5],units=send_list_values[-1],res=res,flag="",res_word=res_word,type='Live Health',msg=msg)
+
+@app.route('/knowmore')
+def knowmore():
+    mydata_ref1 = pd.read_csv('dataset.csv', parse_dates=True)
+    flag="1"
+    # print(mydata_ref1.head())
+    p = range(1, 21)
+    d = range(1, 4)
+    q = range(0, 4)
+    # Generate all different combinations of p, q and q triplets
+    pdq = list(itertools.product(p, d, q))
+    # print(pdq)
+    # print(len(pdq))
+    pdq = (19, 3, 2)  # pdq=find_best_fit()
+    # p,d,q=pdq[0],pdq[1],pdq[2]
+    # print(type(pdq))
+
+    # fit model
+    x = mydata_ref1['distance travelled with remaining fuel']
+    model = ARIMA(x, order=pdq)
+    model_fit = model.fit()
+    model_fit0 = model_fit
+
+    # split data into train and test and forecast test
+    X = mydata_ref1['distance travelled with remaining fuel']
+    size = int(len(X) * 0.6)
+    train = mydata_ref1['distance travelled with remaining fuel'].iloc[:size]
+    test = mydata_ref1['distance travelled with remaining fuel'].iloc[size:]
+    # print(test)
+    # Fit ARIMA(19,3,2) on train data and find parameters
+    model = ARIMA(train, order=(19, 3, 2))
+    model_fit = model.fit(start_params=model_fit0.params)
+    # predict train data
+    print('Forecasting Training Data')
+    pred_train = model_fit.predict(start=1, end=size)
+    # print(pred_train)
+    MSE_train = mean_squared_error(train, pred_train)
+    RMSE_train = sqrt(MSE_train)
+    # RMSPE_train = RMSPE(train,pred_train)
+
+    print('train RMSE: %.5f' % RMSE_train)
+    # print('train RMSPE: %.5f' % RMSPE_train)
+    pred_train = pred_train.tolist()
+    # print("pred_train",pred_train)
+    print('Forecasting Test Data')
+    # predict test data
+    history = [x for x in train]
+    pred_test = list()
+    for t in range(len(test)):
+        model = ARIMA(history, order=(19, 3, 2))
+        model_fit = model.fit(start_params=model_fit.params)
+        output = model_fit.forecast()
+        yhat = output[0]
+        yhat = yhat.tolist()
+        pred_test.append(yhat)
+        obs = test[t + size]
+        history.append(obs)
+    # print('predicted=%f, expected=%f, difference=%f' % (yhat, obs,yhat-obs))
+    MSE_test = mean_squared_error(test, pred_test)
+    RMSE_test = sqrt(MSE_test)
+    # RMSPE_test = RMSPE(test,pred_test)
+    print('test RMSE: %.5f' % RMSE_test)
+    # print('Test RMSPE: %.5f' % RMSPE_test)
+    predictions = np.concatenate((pred_train, pred_test), axis=0)
+    # print(pred_test)
+    # print(len(pred_test))
+
+    # line plot of observed vs predicted
+
+    fig, ax = plt.subplots(1)
+    predictions_df = pd.DataFrame(predictions, columns=['predicted'])
+    new_train = train
+    new_train = new_train.reset_index()
+    list1 = [x for x in range(len(new_train), len(new_train) + len(predictions_df))]
+    pred_index=predictions_df.index.values.tolist()
+    actual_index=new_train.index.values.tolist()
+    actual_dist=new_train['distance travelled with remaining fuel'].tolist()
+    pred_dist=predictions_df['predicted'].tolist()
+    send_list_values = get_dashboard_values()
     return render_template("userhomepage.html", coolant_temp=send_list_values[6], avg_speed=send_list_values[8],
                            intake_air_temp=send_list_values[7], userDetails=userDetails, list_values=send_list_values,
                            engine_rpm=send_list_values[3], engine_runtime=send_list_values[4],
-                           vehicle_speed=send_list_values[5],units=send_list_values[-1],res=res,res_word=res_word,type='Live Health',msg=msg)
+                           vehicle_speed=send_list_values[5],units=send_list_values[-1],flag=flag,actual_index=actual_index,pred_index=pred_index,actual_dist=actual_dist,pred_dist=pred_dist)
+
 
 
 
